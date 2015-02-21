@@ -11,8 +11,3 @@ class window.Deck extends Backbone.Collection
 
   dealDealer: -> new Hand [@pop().flip(), @pop()], @, true
 
-  stand: (isDealer) -> 
-    if isDealer 
-      @trigger('dealerStand')
-    else
-      @trigger('playerStand')

@@ -9,11 +9,12 @@ class window.Hand extends Backbone.Collection
   hit: ->
     @add(@deck.pop())
     score = @scores()
-    alert "bust!" if score[0] > 21
+
+    if score[0] > 21 then @trigger 'gameOver'
 
   stand: ->
     console.log(@isDealer)
-    @deck.stand(@isDealer)
+    @trigger 'stand', @
 
   dealerTurn: ->
     console.log("dealer's turn")
@@ -28,12 +29,7 @@ class window.Hand extends Backbone.Collection
           @hit()
         score = @scores()
         null
-      @endRound()
-
-  endRound: ->
-    console.log("this game over")
-    @trigger('gameOver')
-    
+      if score[0] <= 21 then @trigger 'gameOver' 
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1

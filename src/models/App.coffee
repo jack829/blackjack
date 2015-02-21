@@ -5,30 +5,54 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
+    
     playerHand = @get 'playerHand'
     dealerHand = @get 'dealerHand'
 
-    dealerHand.on('gameOver', ->
+    dealerHand.on('all', @dealerEvents, @)
+    playerHand.on('all', @playerEvents, @)
 
-      playerScore = playerHand.scores()
-      dealerScore = dealerHand.scores()
 
-      if playerScore[1] > 21
-        playerScore = playerScore[0]
-      else
-        playerScore = playerScore[1]
+  playerEvents: (event, hand)->
+    switch event
+      when 'stand' then @get('dealerHand').dealerTurn()
+      when 'gameOver' then @checkWinner()
 
-      if dealerScore[1] > 21
-        dealerScore = dealerScore[0]
-      else
-        dealerScore = dealerScore[1]
+  dealerEvents: (event, hand)->
+    switch event
+      when 'gameOver' then @checkWinner()
 
-      if playerScore > dealerScore
-        #player wins
-        console.log('playerWin')
-        @trigger('playerWins')
-      else
-        #dealer wins
-        console.log('dealerWin')
-        @trigger('dealerWins')
-    , @)
+  checkWinner: ->
+
+    playerHand = @get 'playerHand'
+    dealerHand = @get 'dealerHand'
+
+    playerScore = playerHand.scores()
+    dealerScore = dealerHand.scores()
+
+    if playerScore[1] > 21
+      playerScore = playerScore[0]
+    else
+      playerScore = playerScore[1]
+
+    if dealerScore[1] > 21
+      dealerScore = dealerScore[0]
+    else
+      dealerScore = dealerScore[1]
+
+    if playerScore > 21
+      @trigger 'dealerWins'
+      return
+
+    if dealerScore > 21
+      @trigger 'playerWins'
+      return
+
+    if playerScore > dealerScore 
+      #player wins
+      console.log('playerWin')
+      @trigger('playerWins')
+    else 
+      #dealer wins
+      console.log('dealerWin')
+      @trigger('dealerWins')
