@@ -20,6 +20,10 @@ class window.AppView extends Backbone.View
       alert 'you lose'
     )
 
+    @model.on('push', ->
+      alert 'push'
+    )
+
   render: ->
     @$el.children().detach()
     @$el.html @template()

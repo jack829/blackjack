@@ -2,9 +2,6 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
-    @deck.on('playerStand', @dealerTurn, @)
-    @deck.on('dealerStand', @endRound, @)
-    # @set 'isDealer', @isDealer
 
   hit: ->
     @add(@deck.pop())

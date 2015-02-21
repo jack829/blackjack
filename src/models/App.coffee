@@ -52,7 +52,9 @@ class window.App extends Backbone.Model
       #player wins
       console.log('playerWin')
       @trigger('playerWins')
-    else 
+    else if dealerScore > playerScore
       #dealer wins
       console.log('dealerWin')
       @trigger('dealerWins')
+    else 
+      @trigger 'push'
