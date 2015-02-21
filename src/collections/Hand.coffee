@@ -19,9 +19,21 @@ class window.Hand extends Backbone.Collection
     console.log("dealer's turn")
     if @isDealer 
       @at(0).flip()
+      score = @scores()
+
+      while score[0] < 17
+        if 21 >= score[1] >= 17
+          break
+        else
+          @hit()
+        score = @scores()
+        null
+      @endRound()
 
   endRound: ->
     console.log("this game over")
+    @trigger('gameOver')
+    
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1
